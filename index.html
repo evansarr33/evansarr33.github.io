@@ -3,113 +3,440 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Intranet de la société</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+qdLa3nh1+Y5oHq6A8ft7tZUH7gySk7qU7rKcWZLvz2C+VJJ9G0bfb27snPc8bZ4" crossorigin="anonymous">
+    <title>Intranet d'entreprise</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<body class="bg-gradient">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="#">Intranet</a>
+        <a class="navbar-brand fw-semibold" href="index.html">Chromatotec Intranet</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Accueil</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Actualités</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Annuaire</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Documents</a></li>
+            <ul class="navbar-nav ms-auto gap-lg-2">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#hero">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="#actualites">Actualités</a></li>
+                <li class="nav-item"><a class="nav-link" href="#documents">Documents</a></li>
+                <li class="nav-item"><a class="nav-link" href="#reservations">Réservations</a></li>
                 <li class="nav-item"><a class="nav-link" href="plannings.html">Plannings</a></li>
-                <li class="nav-item"><a class="nav-link" href="affichage.html">Affichage libre</a></li>
+                <li class="nav-item"><a class="nav-link" href="affichage.html">Affichage</a></li>
                 <li class="nav-item"><a class="nav-link" href="pointeuse.html">Pointeuse</a></li>
-                <li class="nav-item"><a class="nav-link" href="#" onclick="openGestion()">Gestion</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" id="linkGestion">Gestion</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
-<header class="hero">
+<header id="hero" class="hero text-white py-5">
     <div class="container">
-        <h1>Bienvenue sur l'intranet</h1>
-        <p class="lead">Retrouvez ici toute l'information interne et vos outils en ligne.</p>
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <p class="mb-2 text-uppercase small fw-bold text-white-50">Chromatotec</p>
+                <h1 class="display-5 fw-semibold">Toute la vie de l'entreprise en un seul endroit</h1>
+                <p class="lead">Suivez l'actualité, accédez aux documents clés, réservez vos ressources et gérez vos plannings en temps réel.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="#actualites" class="btn btn-light text-primary fw-semibold">Dernières actualités</a>
+                    <a href="pointeuse.html" class="btn btn-outline-light">Pointer mon arrivée</a>
+                </div>
+            </div>
+            <div class="col-lg-5 mt-4 mt-lg-0">
+                <div class="card glass-card text-dark">
+                    <div class="card-body">
+                        <h2 class="h5 fw-bold mb-3">Vue d'ensemble</h2>
+                        <div class="row g-3" id="dashboardMetrics">
+                            <div class="col-6 col-md-4">
+                                <div class="metric">
+                                    <span class="metric-value" data-metric="news">-</span>
+                                    <span class="metric-label">Actualités</span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <div class="metric">
+                                    <span class="metric-value" data-metric="documents">-</span>
+                                    <span class="metric-label">Documents</span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <div class="metric">
+                                    <span class="metric-value" data-metric="reservations">-</span>
+                                    <span class="metric-label">Réservations</span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <div class="metric">
+                                    <span class="metric-value" data-metric="announcements">-</span>
+                                    <span class="metric-label">Annonces</span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <div class="metric">
+                                    <span class="metric-value" data-metric="open_tasks">-</span>
+                                    <span class="metric-label">Tâches actives</span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <div class="metric">
+                                    <span class="metric-value" data-metric="pending_approvals">-</span>
+                                    <span class="metric-label">Validations en cours</span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <div class="metric">
+                                    <span class="metric-value" data-metric="general_messages">-</span>
+                                    <span class="metric-label">Messages généraux</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </header>
 
 <main class="container my-5">
-    <div class="row text-center">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Actualités</h5>
-                    <p class="card-text">Restez informés des dernières nouvelles de la société.</p>
-                    <a href="#" class="btn btn-primary">Consulter</a>
-                </div>
+    <section id="actualites" class="mb-5">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+                <p class="text-uppercase text-primary fw-semibold small mb-1">Actualités</p>
+                <h2 class="h3 fw-bold mb-0">Dernières nouvelles</h2>
             </div>
+            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newsModal">Publier une actualité</a>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Annuaire</h5>
-                    <p class="card-text">Accédez rapidement aux contacts de vos collègues.</p>
-                    <a href="#" class="btn btn-primary">Voir l'annuaire</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Documents</h5>
-                    <p class="card-text">Tous les documents et procédures internes à portée de clic.</p>
-                    <a href="#" class="btn btn-primary">Ouvrir</a>
-                </div>
-            </div>
-        </div>
-    </div>
+        <div id="newsList" class="row g-4"></div>
+    </section>
 
-    <section class="mt-5">
-        <h2>Poster une annonce</h2>
-        <div class="mb-3">
-            <textarea id="annonceTexte" class="form-control" rows="3"></textarea>
+    <section id="annonces" class="mb-5">
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="section-header">
+                    <p class="text-uppercase text-primary fw-semibold small mb-1">Communication</p>
+                    <h2 class="h3 fw-bold mb-0">Annonces internes</h2>
+                </div>
+                <div id="announcementsList" class="list-group list-group-flush bg-white rounded-4 shadow-sm"></div>
+            </div>
+            <div class="col-lg-5">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <h3 class="h5 fw-bold">Poster une annonce</h3>
+                        <p class="text-muted small">Diffusez rapidement une information à tous les collaborateurs.</p>
+                        <form id="announcementForm" class="vstack gap-3">
+                            <div>
+                                <label for="announcementAuthor" class="form-label">Nom</label>
+                                <input type="text" class="form-control" id="announcementAuthor" name="author" required>
+                            </div>
+                            <div>
+                                <label for="announcementMessage" class="form-label">Message</label>
+                                <textarea id="announcementMessage" name="message" class="form-control" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Publier</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button id="posterAnnonce" class="btn btn-danger">Publier</button>
+    </section>
+
+    <section id="documents" class="mb-5">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+                <p class="text-uppercase text-primary fw-semibold small mb-1">Ressources</p>
+                <h2 class="h3 fw-bold mb-0">Documents et procédures</h2>
+            </div>
+            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#documentModal">Ajouter un document</a>
+        </div>
+        <div id="documentsList" class="row g-4"></div>
+    </section>
+
+    <section id="reservations" class="mb-5">
+        <div class="row g-4 align-items-stretch">
+            <div class="col-lg-7">
+                <div class="section-header d-flex align-items-center justify-content-between mb-3">
+                    <div>
+                        <p class="text-uppercase text-primary fw-semibold small mb-1">Organisation</p>
+                        <h2 class="h3 fw-bold mb-0">Réservations à venir</h2>
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#reservationModal">Nouvelle réservation</button>
+                </div>
+                <div id="reservationsList" class="timeline"></div>
+            </div>
+            <div class="col-lg-5">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="h5 fw-bold mb-0">Prochaines tâches</h3>
+                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#taskModal">Nouvelle tâche</button>
+                        </div>
+                        <ul id="tasksList" class="list-unstyled vstack gap-3 mb-0"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="analytics" class="mb-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between flex-wrap gap-2 align-items-center mb-3">
+                    <div>
+                        <p class="text-uppercase text-primary fw-semibold small mb-1">Analyse</p>
+                        <h2 class="h3 fw-bold mb-0">Indicateurs en temps réel</h2>
+                    </div>
+                    <button class="btn btn-outline-secondary btn-sm" type="button" onclick="window.location.reload()">Actualiser</button>
+                </div>
+                <div id="engagementSnapshot" class="engagement-snapshot"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="messagerie" class="mb-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-0 d-flex flex-wrap gap-3 justify-content-between align-items-center">
+                <div>
+                    <p class="text-uppercase text-primary fw-semibold small mb-1">Collaboration</p>
+                    <h2 class="h5 fw-bold mb-0">Messagerie en direct</h2>
+                </div>
+                <select id="chatChannel" class="form-select form-select-sm" style="max-width: 200px;">
+                    <option value="general">Canal général</option>
+                    <option value="production">Production</option>
+                    <option value="maintenance">Maintenance</option>
+                    <option value="direction">Direction</option>
+                </select>
+            </div>
+            <div class="card-body">
+                <div id="chatMessages" class="chat-thread mb-3"></div>
+                <form id="chatForm" class="row g-2 align-items-end">
+                    <div class="col-md-3">
+                        <label for="chatAuthor" class="form-label">Nom</label>
+                        <input type="text" class="form-control" id="chatAuthor" name="author" placeholder="Votre nom" required>
+                    </div>
+                    <div class="col-md-7">
+                        <label for="chatMessage" class="form-label">Message</label>
+                        <textarea id="chatMessage" name="message" class="form-control" rows="1" placeholder="Écrire un message" required></textarea>
+                    </div>
+                    <div class="col-md-2 d-grid">
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </section>
 </main>
 
-<footer class="bg-light text-center py-3">
-    <div class="container">
-        &copy; 2025 Société Exemple. Tous droits réservés.
+<footer class="bg-white border-top py-4 mt-auto">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+        <span class="text-muted small">&copy; 2025 Chromatotec. Tous droits réservés.</span>
+        <div class="d-flex align-items-center gap-3 text-muted small">
+            <span>Support : support@chromatotec.fr</span>
+            <span>Version 2.0</span>
+        </div>
     </div>
 </footer>
 
-<div class="modal" id="annonceModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog">
-        <div class="modal-content bg-danger text-white">
-            <div class="modal-body" id="annonceContenu"></div>
+<!-- Modales -->
+<div class="modal fade" id="newsModal" tabindex="-1" aria-labelledby="newsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newsModalLabel">Publier une actualité</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newsForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="newsTitle" class="form-label">Titre</label>
+                        <input type="text" class="form-control" id="newsTitle" name="title" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="newsAuthor" class="form-label">Auteur</label>
+                        <input type="text" class="form-control" id="newsAuthor" name="author" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="newsContent" class="form-label">Contenu</label>
+                        <textarea class="form-control" id="newsContent" name="content" rows="5" required></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="newsCategory" class="form-label">Catégorie</label>
+                        <input type="text" class="form-control" id="newsCategory" name="category" placeholder="RH, Production...">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="newsPublishedAt" class="form-label">Date de publication</label>
+                        <input type="datetime-local" class="form-control" id="newsPublishedAt" name="published_at">
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Publier</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-VgpCB1txz4YKMWz36v3wrPVoi5f2SsOIQKcFmIc9nrgEU6jZ3RxBcRmTkb5y0dFl" crossorigin="anonymous"></script>
-<script>
-document.getElementById('posterAnnonce').addEventListener('click', function() {
-    var text = document.getElementById('annonceTexte').value.trim();
-    if (text) {
-        document.getElementById('annonceContenu').textContent = text;
-        var modal = new bootstrap.Modal(document.getElementById('annonceModal'));
-        modal.show();
-    }
-});
+<div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="documentModalLabel">Ajouter un document</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <form id="documentForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="documentTitle" class="form-label">Titre</label>
+                        <input type="text" class="form-control" id="documentTitle" name="title" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="documentCategory" class="form-label">Catégorie</label>
+                        <input type="text" class="form-control" id="documentCategory" name="category" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="documentUrl" class="form-label">Lien</label>
+                        <input type="url" class="form-control" id="documentUrl" name="url" placeholder="https://..." required>
+                    </div>
+                    <div class="col-12">
+                        <label for="documentDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="documentDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-function openGestion() {
-    var pwd = prompt('Mot de passe ?');
-    if (pwd === 'ADMIN') {
-        window.location.href = 'gestion.html';
-    } else if (pwd !== null) {
-        alert('Mot de passe incorrect');
-    }
-}
-</script>
+<div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="reservationModalLabel">Créer une réservation</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <form id="reservationForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="reservationResource" class="form-label">Ressource</label>
+                        <input type="text" class="form-control" id="reservationResource" name="resource" placeholder="Salle de réunion, véhicule..." required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="reservationTeam" class="form-label">Équipe</label>
+                        <input type="text" class="form-control" id="reservationTeam" name="team" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="reservationStart" class="form-label">Début</label>
+                        <input type="datetime-local" class="form-control" id="reservationStart" name="start_time" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="reservationEnd" class="form-label">Fin</label>
+                        <input type="datetime-local" class="form-control" id="reservationEnd" name="end_time" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="reservationNotes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="reservationNotes" name="notes" rows="3"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label for="reservationAttachment" class="form-label">Pièce jointe</label>
+                        <input type="file" class="form-control" id="reservationAttachment" name="attachment" accept="application/pdf,image/*,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
+                        <div class="form-text">Ajoutez un ordre du jour, une feuille de route ou tout document utile.</div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Réserver</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="taskModalLabel">Créer une tâche</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <form id="taskForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="taskTitle" class="form-label">Titre</label>
+                        <input type="text" class="form-control" id="taskTitle" name="title" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="taskAssignee" class="form-label">Assignée à</label>
+                        <input type="text" class="form-control" id="taskAssignee" name="assigned_to" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="taskDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="taskDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="taskDueDate" class="form-label">Échéance</label>
+                        <input type="date" class="form-control" id="taskDueDate" name="due_date" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="taskPriority" class="form-label">Priorité</label>
+                        <select id="taskPriority" name="priority" class="form-select">
+                            <option value="basse">Basse</option>
+                            <option value="normale" selected>Normale</option>
+                            <option value="moyenne">Moyenne</option>
+                            <option value="haute">Haute</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="taskStatus" class="form-label">Statut</label>
+                        <select id="taskStatus" name="status" class="form-select">
+                            <option value="ouverte" selected>Ouverte</option>
+                            <option value="en_cours">En cours</option>
+                            <option value="terminee">Terminée</option>
+                            <option value="archivee">Archivée</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label for="taskAttachment" class="form-label">Pièce jointe</label>
+                        <input type="file" class="form-control" id="taskAttachment" name="attachment" accept="application/pdf,image/*,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
+                        <div class="form-text">Ajoutez des consignes, une checklist ou tout support utile.</div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Créer la tâche</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="commentsModalLabel">Commentaires</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <ul id="commentsList" class="list-group list-group-flush mb-3"></ul>
+                <p id="commentsEmptyState" class="text-muted small d-none mb-4">Aucun commentaire pour le moment. Soyez le premier à réagir !</p>
+                <form id="commentForm" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="commentAuthor" class="form-label">Nom</label>
+                        <input type="text" class="form-control" id="commentAuthor" name="author" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="commentMessage" class="form-label">Commentaire</label>
+                        <textarea id="commentMessage" name="message" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Publier</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script type="module" src="js/index.js"></script>
 </body>
 </html>

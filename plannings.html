@@ -3,12 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Plannings</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Plannings &amp; disponibilités - Chromatotec</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="p-4">
-    <h1>Plannings</h1>
-    <p>Page des plannings.</p>
+<body class="bg-gradient">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-semibold" href="index.html">Chromatotec Intranet</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto gap-lg-2">
+                <li class="nav-item"><a class="nav-link" href="index.html#hero">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html#actualites">Actualités</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html#documents">Documents</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html#reservations">Réservations</a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="plannings.html">Plannings</a></li>
+                <li class="nav-item"><a class="nav-link" href="affichage.html">Affichage</a></li>
+                <li class="nav-item"><a class="nav-link" href="pointeuse.html">Pointeuse</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" id="linkGestion">Gestion</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<header class="sub-hero text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-6 fw-semibold mb-3">Plannings des équipes</h1>
+                <p class="lead mb-0">Visualisez les rotations, les congés et la disponibilité des ressources en temps réel.</p>
+            </div>
+            <div class="col-lg-5 mt-4 mt-lg-0">
+                <div class="card glass-card text-dark">
+                    <div class="card-body">
+                        <h2 class="h6 text-uppercase text-muted mb-3">Filtres rapides</h2>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="teamFilter" class="form-label text-muted small">Équipe</label>
+                                <select id="teamFilter" class="form-select">
+                                    <option value="">Toutes les équipes</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="startFilter" class="form-label text-muted small">À partir du</label>
+                                <input type="date" id="startFilter" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="endFilter" class="form-label text-muted small">Jusqu'au</label>
+                                <input type="date" id="endFilter" class="form-control">
+                            </div>
+                            <div class="col-12 d-grid">
+                                <button id="resetFilters" class="btn btn-outline-primary btn-sm">Réinitialiser</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container my-5">
+    <section class="mb-5">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+            <div>
+                <p class="text-uppercase text-primary fw-semibold small mb-1">Vue calendrier</p>
+                <h2 class="h3 fw-bold mb-0">Événements à venir</h2>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <button id="exportEventsIcs" class="btn btn-outline-secondary">Exporter en iCal</button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#planningModal">Ajouter un événement</button>
+            </div>
+        </div>
+        <div id="planningTimeline" class="timeline"></div>
+    </section>
+
+    <section class="mb-5">
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                            <h2 class="h5 fw-bold mb-0">Congés planifiés</h2>
+                            <div class="d-flex gap-2">
+                                <button id="exportAbsencesIcs" class="btn btn-outline-secondary btn-sm">Exporter en iCal</button>
+                                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#absenceModal">Déclarer un congé</button>
+                            </div>
+                        </div>
+                        <div id="absencesList" class="vstack gap-3"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h2 class="h5 fw-bold mb-3">Disponibilité des ressources</h2>
+                        <div id="resourcesList" class="vstack gap-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="bg-white border-top py-4 mt-auto">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+        <span class="text-muted small">&copy; 2025 Chromatotec. Tous droits réservés.</span>
+        <span class="text-muted small">Suivi des plannings</span>
+    </div>
+</footer>
+
+<!-- Modales -->
+<div class="modal fade" id="planningModal" tabindex="-1" aria-labelledby="planningModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="planningModalLabel">Créer un événement</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <form id="planningForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="planningTitle" class="form-label">Titre</label>
+                        <input type="text" class="form-control" id="planningTitle" name="title" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="planningTeam" class="form-label">Équipe</label>
+                        <input type="text" class="form-control" id="planningTeam" name="team" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="planningStart" class="form-label">Début</label>
+                        <input type="datetime-local" class="form-control" id="planningStart" name="start_date" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="planningEnd" class="form-label">Fin</label>
+                        <input type="datetime-local" class="form-control" id="planningEnd" name="end_date" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="planningLocation" class="form-label">Lieu</label>
+                        <input type="text" class="form-control" id="planningLocation" name="location">
+                    </div>
+                    <div class="col-12">
+                        <label for="planningDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="planningDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Créer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="absenceModal" tabindex="-1" aria-labelledby="absenceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="absenceModalLabel">Déclarer un congé</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <form id="absenceForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="absenceEmployee" class="form-label">Collaborateur</label>
+                        <input type="text" class="form-control" id="absenceEmployee" name="employee" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="absenceTeam" class="form-label">Équipe</label>
+                        <input type="text" class="form-control" id="absenceTeam" name="team" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="absenceStart" class="form-label">Début</label>
+                        <input type="date" class="form-control" id="absenceStart" name="start_date" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="absenceEnd" class="form-label">Fin</label>
+                        <input type="date" class="form-control" id="absenceEnd" name="end_date" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="absenceReason" class="form-label">Motif</label>
+                        <input type="text" class="form-control" id="absenceReason" name="reason" placeholder="Congés, RTT, formation...">
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script type="module" src="js/plannings.js"></script>
 </body>
 </html>
