@@ -134,54 +134,73 @@ alter table public.absences enable row level security;
 alter table public.resources enable row level security;
 alter table public.time_entries enable row level security;
 
--- Policies: allow anon role full access (adjust for production as needed)
-create policy if not exists "Allow anon read news" on public.news
+drop policy if exists "Allow anon read news" on public.news;
+create policy "Allow anon read news" on public.news
     for select using (true);
-create policy if not exists "Allow anon insert news" on public.news
+drop policy if exists "Allow anon insert news" on public.news;
+create policy "Allow anon insert news" on public.news
     for insert with check (true);
-create policy if not exists "Allow anon update news" on public.news
+drop policy if exists "Allow anon update news" on public.news;
+create policy "Allow anon update news" on public.news
     for update using (true);
-create policy if not exists "Allow anon delete news" on public.news
+drop policy if exists "Allow anon delete news" on public.news;
+create policy "Allow anon delete news" on public.news
     for delete using (true);
 
-create policy if not exists "Allow anon read announcements" on public.announcements
+drop policy if exists "Allow anon read announcements" on public.announcements;
+create policy "Allow anon read announcements" on public.announcements
     for select using (true);
-create policy if not exists "Allow anon write announcements" on public.announcements
+drop policy if exists "Allow anon write announcements" on public.announcements;
+create policy "Allow anon write announcements" on public.announcements
     for all using (true) with check (true);
 
-create policy if not exists "Allow anon read documents" on public.documents
+drop policy if exists "Allow anon read documents" on public.documents;
+create policy "Allow anon read documents" on public.documents
     for select using (true);
-create policy if not exists "Allow anon write documents" on public.documents
+drop policy if exists "Allow anon write documents" on public.documents;
+create policy "Allow anon write documents" on public.documents
     for all using (true) with check (true);
 
-create policy if not exists "Allow anon read reservations" on public.reservations
+drop policy if exists "Allow anon read reservations" on public.reservations;
+create policy "Allow anon read reservations" on public.reservations
     for select using (true);
-create policy if not exists "Allow anon write reservations" on public.reservations
+drop policy if exists "Allow anon write reservations" on public.reservations;
+create policy "Allow anon write reservations" on public.reservations
     for all using (true) with check (true);
 
-create policy if not exists "Allow anon read tasks" on public.tasks
+drop policy if exists "Allow anon read tasks" on public.tasks;
+create policy "Allow anon read tasks" on public.tasks
     for select using (true);
-create policy if not exists "Allow anon write tasks" on public.tasks
+drop policy if exists "Allow anon write tasks" on public.tasks;
+create policy "Allow anon write tasks" on public.tasks
     for all using (true) with check (true);
 
-create policy if not exists "Allow anon read plannings" on public.plannings
+drop policy if exists "Allow anon read plannings" on public.plannings;
+create policy "Allow anon read plannings" on public.plannings
     for select using (true);
-create policy if not exists "Allow anon write plannings" on public.plannings
+drop policy if exists "Allow anon write plannings" on public.plannings;
+create policy "Allow anon write plannings" on public.plannings
     for all using (true) with check (true);
 
-create policy if not exists "Allow anon read absences" on public.absences
+drop policy if exists "Allow anon read absences" on public.absences;
+create policy "Allow anon read absences" on public.absences
     for select using (true);
-create policy if not exists "Allow anon write absences" on public.absences
+drop policy if exists "Allow anon write absences" on public.absences;
+create policy "Allow anon write absences" on public.absences
     for all using (true) with check (true);
 
-create policy if not exists "Allow anon read resources" on public.resources
+drop policy if exists "Allow anon read resources" on public.resources;
+create policy "Allow anon read resources" on public.resources
     for select using (true);
-create policy if not exists "Allow anon write resources" on public.resources
+drop policy if exists "Allow anon write resources" on public.resources;
+create policy "Allow anon write resources" on public.resources
     for all using (true) with check (true);
 
-create policy if not exists "Allow anon read time entries" on public.time_entries
+drop policy if exists "Allow anon read time entries" on public.time_entries;
+create policy "Allow anon read time entries" on public.time_entries
     for select using (true);
-create policy if not exists "Allow anon write time entries" on public.time_entries
+drop policy if exists "Allow anon write time entries" on public.time_entries;
+create policy "Allow anon write time entries" on public.time_entries
     for all using (true) with check (true);
 
 -- Optional helper view for dashboard metrics (counts per table)
