@@ -75,6 +75,73 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="h5 fw-bold mb-0">Tâches</h2>
+                        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#formTask">Ajouter</button>
+                    </div>
+                    <div id="formTask" class="collapse">
+                        <form id="adminTaskForm" class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label">Titre</label>
+                                <input type="text" class="form-control" name="title" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Assignée à</label>
+                                <input type="text" class="form-control" name="assigned_to" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Échéance</label>
+                                <input type="date" class="form-control" name="due_date" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Priorité</label>
+                                <select name="priority" class="form-select">
+                                    <option value="basse">Basse</option>
+                                    <option value="normale" selected>Normale</option>
+                                    <option value="moyenne">Moyenne</option>
+                                    <option value="haute">Haute</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Statut</label>
+                                <select name="status" class="form-select">
+                                    <option value="ouverte" selected>Ouverte</option>
+                                    <option value="en_cours">En cours</option>
+                                    <option value="terminee">Terminée</option>
+                                    <option value="archivee">Archivée</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" name="description" rows="3"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">Créer la tâche</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-middle" id="adminTaskTable">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Titre</th>
+                                <th>Échéance</th>
+                                <th>Priorité</th>
+                                <th>Statut</th>
+                                <th>Pièces jointes</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
                         <h2 class="h5 fw-bold mb-0">Actualités</h2>
                         <button class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#formNews">Ajouter</button>
                     </div>
@@ -113,6 +180,32 @@
                                 <th>Catégorie</th>
                                 <th>Publication</th>
                                 <th>Auteur</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="h5 fw-bold mb-0">Demandes en validation</h2>
+                        <span class="badge bg-secondary-subtle text-secondary" id="approvalCount">- en attente</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-middle" id="adminApprovalTable">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Type</th>
+                                <th>Demandeur</th>
+                                <th>État</th>
+                                <th>Dernière mise à jour</th>
+                                <th>Notes</th>
                                 <th></th>
                             </tr>
                             </thead>

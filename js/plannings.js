@@ -9,10 +9,89 @@ const startFilter = document.getElementById('startFilter');
 const endFilter = document.getElementById('endFilter');
 const resetFilters = document.getElementById('resetFilters');
 const linkGestion = document.getElementById('linkGestion');
+const exportEventsButton = document.getElementById('exportEventsIcs');
+const exportAbsencesButton = document.getElementById('exportAbsencesIcs');
 
 let events = [];
 let absences = [];
 let resources = [];
+
+function formatIcsDate(value, allDay = false) {
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+  if (allDay) {
+    return date.toISOString().slice(0, 10).replace(/-/g, '');
+  }
+  return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+}
+
+function addDays(value, days) {
+  const date = value instanceof Date ? new Date(value.getTime()) : new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+  date.setUTCDate(date.getUTCDate() + days);
+  return date;
+}
+
+function escapeIcsText(value) {
+  return String(value || '')
+    .replace(/\\n/g, '\\n')
+    .replace(/\n/g, '\\n')
+    .replace(/,/g, '\\,')
+    .replace(/;/g, '\\;');
+}
+
+function createIcsCalendar(records, { summary, description, location, startKey, endKey, allDay = false }) {
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Chromatotec//Intranet//FR'];
+  const nowStamp = formatIcsDate(new Date());
+  const fallbackUid = () => Math.random().toString(36).slice(2);
+
+  records.forEach((record) => {
+    const startValue = formatIcsDate(record[startKey], allDay);
+    const endSource = record[endKey] || record[startKey];
+    const endValue = allDay
+      ? formatIcsDate(addDays(endSource, 1), true)
+      : formatIcsDate(endSource, false);
+
+    if (!startValue || !endValue) return;
+
+    lines.push('BEGIN:VEVENT');
+    const uid = record.id || (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : fallbackUid());
+    lines.push(`UID:${uid}`);
+    lines.push(`DTSTAMP:${nowStamp}`);
+    if (allDay) {
+      lines.push(`DTSTART;VALUE=DATE:${startValue}`);
+      lines.push(`DTEND;VALUE=DATE:${endValue}`);
+    } else {
+      lines.push(`DTSTART:${startValue}`);
+      lines.push(`DTEND:${endValue}`);
+    }
+    lines.push(`SUMMARY:${escapeIcsText(summary(record))}`);
+    const descValue = description ? description(record) : '';
+    if (descValue) {
+      lines.push(`DESCRIPTION:${escapeIcsText(descValue)}`);
+    }
+    const locValue = location ? location(record) : '';
+    if (locValue) {
+      lines.push(`LOCATION:${escapeIcsText(locValue)}`);
+    }
+    lines.push('END:VEVENT');
+  });
+
+  lines.push('END:VCALENDAR');
+  return lines.join('\r\n');
+}
+
+function downloadIcs(content, filename) {
+  const blob = new Blob([content], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+  URL.revokeObjectURL(url);
+}
 
 async function loadData() {
   planningTimeline.innerHTML = createSpinner('Chargement des événements...');
@@ -223,6 +302,40 @@ resetFilters.addEventListener('click', (event) => {
   startFilter.value = '';
   endFilter.value = '';
   renderEvents();
+});
+
+exportEventsButton?.addEventListener('click', () => {
+  if (!events.length) {
+    showToast('Aucun événement à exporter.', 'info');
+    return;
+  }
+  const ics = createIcsCalendar(events, {
+    summary: (event) => `${event.team || 'Équipe'} · ${event.title}`,
+    description: (event) => event.description || '',
+    location: (event) => event.location || '',
+    startKey: 'start_date',
+    endKey: 'end_date',
+    allDay: true,
+  });
+  downloadIcs(ics, 'plannings-chromatotec.ics');
+  showToast('Calendrier exporté (format iCal).', 'success');
+});
+
+exportAbsencesButton?.addEventListener('click', () => {
+  if (!absences.length) {
+    showToast('Aucun congé à exporter.', 'info');
+    return;
+  }
+  const ics = createIcsCalendar(absences, {
+    summary: (absence) => `${absence.employee} (${absence.team || 'Équipe'})`,
+    description: (absence) => absence.reason || '',
+    location: () => 'Chromatotec',
+    startKey: 'start_date',
+    endKey: 'end_date',
+    allDay: true,
+  });
+  downloadIcs(ics, 'absences-chromatotec.ics');
+  showToast('Calendrier des congés exporté.', 'success');
 });
 
 linkGestion.addEventListener('click', (event) => {

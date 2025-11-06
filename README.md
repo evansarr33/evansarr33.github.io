@@ -25,6 +25,19 @@ serve .
 Ensuite, ouvrez [http://localhost:3000](http://localhost:3000) (ou le port indiqué
 par `serve`) dans votre navigateur.
 
+## Vérifications automatisées
+
+Après `npm install`, vous pouvez exécuter les commandes suivantes :
+
+```bash
+npm run lint         # Vérifie la qualité du code avec ESLint
+npm run format       # Vérifie le formatage Prettier
+npm run test:e2e     # Lancement des tests Playwright (aucun serveur requis)
+```
+
+La CI GitHub Actions (`.github/workflows/ci.yml`) lance automatiquement ces commandes à chaque push
+ou Pull Request.
+
 ## Structure
 
 - `index.html` – tableau de bord principal connecté à Supabase (actualités,

@@ -8,25 +8,25 @@
 - Ajouter des notifications in-app et par email pour les annonces importantes, la validation de demandes et les rappels de tâches.
 
 ## Fonctionnalités métiers
-- Implémenter un système de commentaires sur les actualités et documents pour favoriser les échanges internes (tables `news_comments`, `document_comments`, interface de modération, notifications des auteurs).
-- Ajouter un module de messagerie ou chat interne en s'appuyant sur Supabase Realtime (rooms, conversations privées, présence en ligne, archives consultables).
-- Permettre l'attachement de fichiers lors de la création de réservations ou de tâches, avec stockage dans Supabase Storage (bucket dédié, métadonnées liées dans la base, règles RLS adaptées).
-- Intégrer un calendrier partagé synchronisé (iCal/Outlook) pour les plannings et les absences (flux ICS exportables, webhooks pour synchronisation bidirectionnelle, vues calendaires hebdo/mensuelles).
-- Mettre en place des workflows de validation (ex : demandes de congés, réservations de salles) avec étapes d'approbation, notifications, relances et historique des décisions.
+- ✅ Commentaires sur les actualités et documents en place (table `comments`, modale dédiée, rafraîchissement temps réel). Reste à ajouter la modération fine (suppression, reporting) et les notifications des auteurs.
+- ✅ Messagerie interne en temps réel (canaux Supabase Realtime, export métriques). À planifier : conversations privées, présence en ligne et archivage longue durée.
+- ✅ Pièces jointes pour réservations et tâches (bucket `intranet-attachments`, politiques RLS). À compléter avec un module de prévisualisation et un quota d'espace par équipe.
+- ✅ Export iCal pour plannings et absences. Prochaine étape : synchronisation bidirectionnelle (webhooks Outlook/Google) et vue calendrier mensuelle.
+- ✅ Workflows d'approbation (triggers, tableau d'administration). À enrichir avec des relances automatiques, des étapes multiples et la possibilité d'ajouter des pièces jointes aux décisions.
 
 ## Données et automatisations
-- Créer des fonctions et triggers Supabase pour calculer automatiquement des indicateurs clés (retards, disponibilités, taux d'occupation des salles) et alimenter des vues dédiées.
-- Ajouter des tâches planifiées (Edge Functions ou CRON) pour envoyer des rappels quotidiens aux employés (présences, échéances de tâches, validations en attente).
-- Mettre en place des tableaux de bord analytiques supplémentaires en exploitant `dashboard_metrics` ou des vues dédiées, avec graphiques (D3.js/Chart.js) et filtres temporels.
-- Assurer la sauvegarde et l'archivage régulier des documents via Supabase Storage versionné, avec politique de rétention et restauration.
-- Documenter des scripts d'import/export CSV pour faciliter la migration de données historiques (CLI Supabase, scripts Node/TS, mapping des colonnes).
+- ✅ Fonctions et triggers Supabase ajoutés (métriques ressources, ponctualité, workflows). À suivre : calcul du taux d'occupation par ressource et indicateurs de productivité.
+- ✅ Tâche planifiée via `cron.schedule` pour journaliser les rappels quotidiens. Reste à connecter une Edge Function pour envoyer réellement emails/notifications.
+- ✅ Tableau de bord analytique (vue `engagement_dashboard`, section analytics). Prochain jalon : graphiques interactifs et filtres temporels (Chart.js/D3).
+- ✅ Bucket versionné `intranet-attachments` créé. À formaliser : politique de rétention, chiffrement côté client et procédure de restauration.
+- ⏳ Scripts d'import/export CSV à écrire (liste des colonnes, gabarits, vérifications d'intégrité) et documentation associée.
 
 ## Qualité logicielle
-- Couvrir le front-end avec des tests end-to-end (Playwright/Cypress) pour garantir le bon fonctionnement des flux principaux (connexion, publication d'annonce, réservation, validation).
-- Ajouter un linting automatisé (ESLint + Prettier) et une intégration continue (GitHub Actions) pour vérifier le code à chaque commit et appliquer un formatage homogène.
-- Factoriser les composants UI récurrents (cards, modals, tables) via un framework (React/Vue) ou des Web Components pour réduire la duplication et faciliter l'évolution.
-- Implémenter un service de gestion d'état (ex : Zustand, Pinia) pour simplifier la synchronisation des données Supabase et centraliser les règles métiers.
-- Documenter un guide de contribution détaillé (CONTRIBUTING.md) pour faciliter l'onboarding des futurs développeurs, expliquer les conventions et le workflow Git.
+- ✅ Socle de tests end-to-end (Playwright + smoke tests). À compléter avec des scénarios avancés (création de réservation, validation de congé).
+- ✅ Linting + formatage + CI GitHub Actions. Prévoir un badge de statut dans le README et l'analyse automatique des PR.
+- ⏳ Factoriser les composants UI (framework ou Web Components) pour réduire la duplication et mutualiser les modales.
+- ✅ Service de gestion d'état maison (`js/state.js`). À surveiller : généraliser l'usage du store sur toutes les pages.
+- ✅ Guide de contribution (`CONTRIBUTING.md`). Reste à détailler les règles de nommage Supabase et la stratégie de branches.
 
 ## Sécurité
 - Activer la journalisation (Audit Logs) et des alertes en cas d'accès suspect dans Supabase.

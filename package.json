@@ -1,0 +1,20 @@
+{
+  "name": "chromatotec-intranet",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.45.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.1",
+    "@typescript-eslint/parser": "^7.13.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "prettier": "^3.2.5"
+  }
+}
