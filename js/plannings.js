@@ -1,4 +1,4 @@
-import { fetchTable, insertRow } from './supabaseClient.js';
+import { fetchTable, insertRow, subscribeToTable } from './supabaseClient.js';
 import { createSpinner, handleForm, showToast, formatDate, formatDay } from './ui.js';
 
 const planningTimeline = document.getElementById('planningTimeline');
@@ -159,7 +159,7 @@ handleForm(document.getElementById('planningForm'), async (formData) => {
   const { error } = await insertRow('plannings', payload);
   if (error) throw error;
   showToast('Événement ajouté', 'success');
-  bootstrap.Modal.getInstance(document.getElementById('planningModal')).hide();
+  window.bootstrap.Modal.getOrCreateInstance(document.getElementById('planningModal')).hide();
   await reloadEvents();
 });
 
@@ -175,7 +175,7 @@ handleForm(document.getElementById('absenceForm'), async (formData) => {
   const { error } = await insertRow('absences', payload);
   if (error) throw error;
   showToast('Absence enregistrée', 'success');
-  bootstrap.Modal.getInstance(document.getElementById('absenceModal')).hide();
+  window.bootstrap.Modal.getOrCreateInstance(document.getElementById('absenceModal')).hide();
   await reloadAbsences();
 });
 
@@ -203,6 +203,17 @@ async function reloadAbsences() {
   renderAbsences();
 }
 
+async function reloadResources() {
+  const { data, error } = await fetchTable('resources', { order: { column: 'name', ascending: true } });
+  if (error) {
+    console.error(error);
+    showToast('Impossible de recharger les ressources.', 'danger');
+    return;
+  }
+  resources = data || [];
+  renderResources();
+}
+
 teamFilter.addEventListener('change', renderEvents);
 startFilter.addEventListener('change', renderEvents);
 endFilter.addEventListener('change', renderEvents);
@@ -223,6 +234,16 @@ linkGestion.addEventListener('click', (event) => {
   } else if (password) {
     showToast('Mot de passe incorrect', 'danger');
   }
+});
+
+const realtimeUnsubscribes = [
+  subscribeToTable('plannings', () => reloadEvents()),
+  subscribeToTable('absences', () => reloadAbsences()),
+  subscribeToTable('resources', () => reloadResources()),
+];
+
+window.addEventListener('beforeunload', () => {
+  realtimeUnsubscribes.forEach((unsubscribe) => unsubscribe());
 });
 
 loadData().catch((error) => {

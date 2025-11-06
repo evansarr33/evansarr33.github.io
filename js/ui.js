@@ -28,7 +28,7 @@ export function showToast(message, type = 'primary') {
     </div>`;
 
   container.append(wrapper);
-  const toast = new bootstrap.Toast(wrapper, { delay: 3500 });
+  const toast = new window.bootstrap.Toast(wrapper, { delay: 3500 });
   toast.show();
 }
 

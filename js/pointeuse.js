@@ -1,4 +1,4 @@
-import { fetchTable, insertRow } from './supabaseClient.js';
+import { fetchTable, insertRow, subscribeToTable } from './supabaseClient.js';
 import { createSpinner, handleForm, showToast, formatDate } from './ui.js';
 
 const historyBody = document.getElementById('historyBody');
@@ -128,6 +128,12 @@ linkGestion.addEventListener('click', (event) => {
   } else if (password) {
     showToast('Mot de passe incorrect', 'danger');
   }
+});
+
+const unsubscribeRealtime = subscribeToTable('time_entries', () => loadHistory(historyEmail.value || undefined));
+
+window.addEventListener('beforeunload', () => {
+  unsubscribeRealtime();
 });
 
 loadHistory().catch((error) => {

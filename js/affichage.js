@@ -1,4 +1,4 @@
-import { fetchTable, insertRow, deleteRow } from './supabaseClient.js';
+import { fetchTable, insertRow, deleteRow, subscribeToTable } from './supabaseClient.js';
 import { createSpinner, handleForm, showToast, formatDate } from './ui.js';
 
 const boardList = document.getElementById('boardList');
@@ -137,6 +137,12 @@ linkGestion.addEventListener('click', (event) => {
   } else if (password) {
     showToast('Mot de passe incorrect', 'danger');
   }
+});
+
+const unsubscribeRealtime = subscribeToTable('announcements', () => loadAnnouncements());
+
+window.addEventListener('beforeunload', () => {
+  unsubscribeRealtime();
 });
 
 loadAnnouncements().catch((error) => {

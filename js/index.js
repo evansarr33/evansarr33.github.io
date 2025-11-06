@@ -1,4 +1,4 @@
-import { fetchTable, insertRow } from './supabaseClient.js';
+import { fetchTable, insertRow, fetchDashboardMetrics, subscribeToTable } from './supabaseClient.js';
 import { createSpinner, renderList, handleForm, showToast, formatDate, formatDay } from './ui.js';
 
 const newsList = document.getElementById('newsList');
@@ -23,24 +23,34 @@ async function loadDashboard() {
     fetchTable('tasks', { order: { column: 'due_date', ascending: true }, limit: 5 }),
   ]);
 
-  updateMetrics({
-    news: news.data?.length || 0,
-    announcements: announcements.data?.length || 0,
-    documents: documents.data?.length || 0,
-    reservations: reservations.data?.length || 0,
-  });
-
   renderNews(news.data, news.error);
   renderAnnouncements(announcements.data, announcements.error);
   renderDocuments(documents.data, documents.error);
   renderReservations(reservations.data, reservations.error);
   renderTasks(tasks.data, tasks.error);
+
+  await refreshMetrics();
 }
 
 function updateMetrics(values) {
   metricsElements.forEach((metric) => {
     const key = metric.dataset.metric;
     metric.textContent = values[key] ?? '-';
+  });
+}
+
+async function refreshMetrics() {
+  const { data, error } = await fetchDashboardMetrics();
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  updateMetrics({
+    news: data.news_count,
+    announcements: data.announcements_count,
+    documents: data.documents_count,
+    reservations: data.reservations_count,
   });
 }
 
@@ -212,7 +222,7 @@ handleForm(document.getElementById('newsForm'), async (formData) => {
   const { error } = await insertRow('news', payload);
   if (error) throw error;
   showToast('Actualité publiée', 'success');
-  bootstrap.Modal.getInstance(document.getElementById('newsModal')).hide();
+  window.bootstrap.Modal.getOrCreateInstance(document.getElementById('newsModal')).hide();
   await refreshNews();
 });
 
@@ -227,7 +237,7 @@ handleForm(document.getElementById('documentForm'), async (formData) => {
   const { error } = await insertRow('documents', payload);
   if (error) throw error;
   showToast('Document ajouté', 'success');
-  bootstrap.Modal.getInstance(document.getElementById('documentModal')).hide();
+  window.bootstrap.Modal.getOrCreateInstance(document.getElementById('documentModal')).hide();
   await refreshDocuments();
 });
 
@@ -243,40 +253,60 @@ handleForm(document.getElementById('reservationForm'), async (formData) => {
   const { error } = await insertRow('reservations', payload);
   if (error) throw error;
   showToast('Réservation créée', 'success');
-  bootstrap.Modal.getInstance(document.getElementById('reservationModal')).hide();
+  window.bootstrap.Modal.getOrCreateInstance(document.getElementById('reservationModal')).hide();
   await refreshReservations();
 });
 
 async function refreshAnnouncements() {
   const { data, error } = await fetchTable('announcements', { order: { column: 'created_at' } });
   renderAnnouncements(data, error);
-  updateMetric('announcements', data?.length ?? 0);
+  await refreshMetrics();
 }
 
 async function refreshNews() {
   const { data, error } = await fetchTable('news', { order: { column: 'published_at' }, limit: 6 });
   renderNews(data, error);
-  updateMetric('news', data?.length ?? 0);
+  await refreshMetrics();
 }
 
 async function refreshDocuments() {
   const { data, error } = await fetchTable('documents', { order: { column: 'updated_at' }, limit: 6 });
   renderDocuments(data, error);
-  updateMetric('documents', data?.length ?? 0);
+  await refreshMetrics();
 }
 
 async function refreshReservations() {
   const { data, error } = await fetchTable('reservations', { order: { column: 'start_time', ascending: true }, limit: 8 });
   renderReservations(data, error);
-  updateMetric('reservations', data?.length ?? 0);
+  await refreshMetrics();
 }
 
-function updateMetric(name, value) {
-  const element = document.querySelector(`[data-metric="${name}"]`);
-  if (element) {
-    element.textContent = value;
-  }
+async function refreshTasks() {
+  const { data, error } = await fetchTable('tasks', { order: { column: 'due_date', ascending: true }, limit: 5 });
+  renderTasks(data, error);
 }
+
+function setupRealtime() {
+  if (setupRealtime.initialized) return;
+  setupRealtime.initialized = true;
+
+  const unsubscribes = [
+    subscribeToTable('announcements', () => refreshAnnouncements()),
+    subscribeToTable('news', () => refreshNews()),
+    subscribeToTable('documents', () => refreshDocuments()),
+    subscribeToTable('reservations', () => refreshReservations()),
+    subscribeToTable('tasks', () => refreshTasks()),
+  ];
+
+  const cleanup = () => {
+    unsubscribes.forEach((unsubscribe) => unsubscribe());
+    window.removeEventListener('beforeunload', cleanup);
+  };
+
+  window.addEventListener('beforeunload', cleanup);
+}
+
+setupRealtime.initialized = false;
 
 const linkGestion = document.getElementById('linkGestion');
 linkGestion.addEventListener('click', (event) => {
@@ -290,7 +320,9 @@ linkGestion.addEventListener('click', (event) => {
   }
 });
 
-loadDashboard().catch((error) => {
-  console.error(error);
-  showToast('Impossible de charger le tableau de bord.', 'danger');
-});
+loadDashboard()
+  .then(() => setupRealtime())
+  .catch((error) => {
+    console.error(error);
+    showToast('Impossible de charger le tableau de bord.', 'danger');
+  });

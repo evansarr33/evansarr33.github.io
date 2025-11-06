@@ -25,7 +25,13 @@ export async function fetchTable(table, options = {}) {
     query.match(options.match);
   }
 
-  return query;
+  if (options.eq) {
+    Object.entries(options.eq).forEach(([column, value]) => {
+      query.eq(column, value);
+    });
+  }
+
+  return await query;
 }
 
 export async function insertRow(table, payload) {
@@ -38,4 +44,20 @@ export async function updateRow(table, id, payload) {
 
 export async function deleteRow(table, id) {
   return supabase.from(table).delete().eq('id', id);
+}
+
+export async function fetchDashboardMetrics() {
+  return supabase.from('dashboard_metrics').select('*').single();
+}
+
+export function subscribeToTable(table, handler, options = {}) {
+  const { event = '*', schema = 'public', filter } = options;
+  const channel = supabase
+    .channel(`public:${table}:${Math.random().toString(36).slice(2)}`)
+    .on('postgres_changes', { event, schema, table, filter }, handler)
+    .subscribe();
+
+  return () => {
+    supabase.removeChannel(channel);
+  };
 }

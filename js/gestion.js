@@ -1,4 +1,4 @@
-import { fetchTable, insertRow, deleteRow } from './supabaseClient.js';
+import { fetchTable, insertRow, deleteRow, subscribeToTable } from './supabaseClient.js';
 import { handleForm, showToast, formatDate } from './ui.js';
 
 const guard = document.getElementById('adminGuard');
@@ -13,6 +13,8 @@ const clearSessionButton = document.getElementById('clearAdminSession');
 
 const hasAccess = sessionStorage.getItem('intranet_admin') === '1';
 
+let realtimeUnsubscribes = [];
+
 if (!hasAccess) {
   guard.classList.remove('d-none');
   panels.classList.add('d-none');
@@ -23,6 +25,14 @@ if (!hasAccess) {
     console.error(error);
     showToast('Impossible de charger les données administrateur.', 'danger');
   });
+
+  realtimeUnsubscribes = [
+    subscribeToTable('news', () => loadAdminData()),
+    subscribeToTable('documents', () => loadAdminData()),
+    subscribeToTable('plannings', () => loadAdminData()),
+    subscribeToTable('resources', () => loadAdminData()),
+    subscribeToTable('time_entries', () => loadAdminData()),
+  ];
 }
 
 async function loadAdminData() {
@@ -229,4 +239,8 @@ clearSessionButton.addEventListener('click', () => {
   setTimeout(() => {
     window.location.href = 'index.html';
   }, 800);
+});
+
+window.addEventListener('beforeunload', () => {
+  realtimeUnsubscribes.forEach((unsubscribe) => unsubscribe());
 });
